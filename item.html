@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wedding Budget Item</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script defer src="data.js"></script>
+    <!-- Include the open‑source marked library for Markdown parsing -->
+    <script defer src="js/marked.min.js"></script>
+    <script defer src="js/item.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Item Details</h1>
+    </header>
+    <main>
+      <p><a href="index.html">← Back to list</a></p>
+      <section class="item-details">
+        <div><strong>Category:</strong> <span id="category"></span></div>
+        <div><strong>Required:</strong> <span id="required"></span></div>
+        <div><strong>Notes:</strong> <span id="notes"></span></div>
+        <div><strong>Unit Cost:</strong> <span id="unitCost"></span></div>
+        <div><strong>Quantity:</strong> <span id="quantity"></span></div>
+        <div><strong>Subtotal:</strong> <span id="subTotal"></span></div>
+      </section>
+      <section class="markdown-content" id="markdownContent"></section>
+    </main>
+    <footer>
+      <p>&copy; 2025 Wedding Planner</p>
+    </footer>
+  </body>
+</html>

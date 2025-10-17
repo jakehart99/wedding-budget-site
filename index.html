@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wedding Budget Planner</title>
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Data file -->
+    <script defer src="data.js"></script>
+    <!-- App logic -->
+    <script defer src="js/index.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Wedding Budget Planner</h1>
+    </header>
+    <main>
+      <div class="controls">
+        <input type="text" id="searchInput" placeholder="Search by item or category" />
+        <select id="categoryFilter">
+          <option value="">All Categories</option>
+        </select>
+        <label>
+          <input type="checkbox" id="requiredFilter" /> Required only
+        </label>
+      </div>
+      <div class="summary">
+        Showing <span id="visibleCount">0</span> of <span id="totalCount">0</span>
+        items | Total estimated cost: $<span id="totalCost">0.00</span>
+      </div>
+      <div class="table-container">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th data-sort="id">#</th>
+              <th data-sort="category">Category</th>
+              <th data-sort="item">Item</th>
+              <th data-sort="required">Required</th>
+              <th data-sort="unitCost">Unit Cost</th>
+              <th data-sort="quantity">Qty</th>
+              <th data-sort="subTotal">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </main>
+    <footer>
+      <p>&copy; 2025 Wedding Planner</p>
+    </footer>
+  </body>
+</html>
