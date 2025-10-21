@@ -7,16 +7,46 @@
     <title>Wedding Budget Planner</title>
     <!-- Main stylesheet -->
     <link rel="stylesheet" href="css/style.css" />
-    <!-- Data file -->
-    <script defer src="data.js"></script>
+    <!-- Supabase client - load synchronously to ensure it's available -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Supabase configuration -->
+    <script>
+      const SUPABASE_URL = 'https://ngatfywxrhkuqcbiewsb.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nYXRmeXd4cmhrdXFjYmlld3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA5ODgyNDEsImV4cCI6MjA3NjU2NDI0MX0.i2iOQZEBlDNyc0IpUNeCHNgLDB4vARqTv_keP7jS3tM';
+      console.log('✅ Supabase config loaded');
+      console.log('✅ supabase object:', typeof supabase);
+    </script>
     <!-- App logic -->
-    <script defer src="js/index.js"></script>
+    <script src="js/index.js?v=3"></script>
   </head>
   <body>
     <header>
       <h1>Wedding Budget Planner</h1>
     </header>
     <main>
+      <!-- Budget Summary Cards -->
+      <div class="metrics-container">
+        <div class="metric-card">
+          <div class="metric-label">Total Estimated Cost</div>
+          <div class="metric-value" id="metricTotalCost">$0.00</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Budget</div>
+          <div class="metric-value" id="metricBudget">$0.00</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Remaining</div>
+          <div class="metric-value" id="metricRemaining">$0.00</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Budget Used</div>
+          <div class="metric-value" id="metricPercentage">0%</div>
+          <div class="metric-progress">
+            <div class="metric-progress-bar" id="metricProgressBar"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="controls">
         <input type="text" id="searchInput" placeholder="Search by item or category" />
         <select id="categoryFilter">
@@ -25,6 +55,7 @@
         <label>
           <input type="checkbox" id="requiredFilter" /> Required only
         </label>
+        <button id="addItemBtn" class="btn-primary">+ Add New Item</button>
       </div>
       <div class="summary">
         Showing <span id="visibleCount">0</span> of <span id="totalCount">0</span>
@@ -41,6 +72,7 @@
               <th data-sort="unitCost">Unit Cost</th>
               <th data-sort="quantity">Qty</th>
               <th data-sort="subTotal">Subtotal</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -50,5 +82,8 @@
     <footer>
       <p>&copy; 2025 Wedding Planner</p>
     </footer>
+
+    <!-- Hidden datalist for category autocomplete (populated dynamically) -->
+    <datalist id="categoryList"></datalist>
   </body>
 </html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supabase Connection Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .log {
+      background: #f5f5f5;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .success { color: green; }
+    .error { color: red; }
+    .info { color: blue; }
+    button {
+      background: #007aff;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0.5rem 0.5rem 0.5rem 0;
+    }
+    button:hover {
+      background: #0051d5;
+    }
+    pre {
+      background: #f9f9f9;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Supabase Connection Test</h1>
+
+  <div>
+    <button onclick="testConnection()">Test Connection</button>
+    <button onclick="fetchItems()">Fetch Items</button>
+    <button onclick="clearLog()">Clear Log</button>
+  </div>
+
+  <div id="log" class="log">Click "Test Connection" to begin...</div>
+
+  <h2>Retrieved Data:</h2>
+  <pre id="dataOutput">No data yet...</pre>
+
+  <!-- Supabase client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL = 'https://ngatfywxrhkuqcbiewsb.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nYXRmeXd4cmhrdXFjYmlld3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA5ODgyNDEsImV4cCI6MjA3NjU2NDI0MX0.i2iOQZEBlDNyc0IpUNeCHNgLDB4vARqTv_keP7jS3tM';
+
+    const logDiv = document.getElementById('log');
+    const dataOutput = document.getElementById('dataOutput');
+
+    function log(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const className = type;
+      const line = document.createElement('div');
+      line.className = className;
+      line.textContent = `[${timestamp}] ${message}`;
+      logDiv.appendChild(line);
+      logDiv.scrollTop = logDiv.scrollHeight;
+      console.log(message);
+    }
+
+    function clearLog() {
+      logDiv.innerHTML = '';
+    }
+
+    async function testConnection() {
+      log('Testing Supabase connection...', 'info');
+
+      try {
+        // Check if supabase is loaded
+        if (typeof supabase === 'undefined') {
+          log('ERROR: Supabase library not loaded!', 'error');
+          return;
+        }
+        log('✓ Supabase library loaded', 'success');
+
+        // Check if createClient exists
+        if (typeof supabase.createClient !== 'function') {
+          log('ERROR: supabase.createClient is not a function!', 'error');
+          log('supabase object: ' + JSON.stringify(Object.keys(supabase)), 'error');
+          return;
+        }
+        log('✓ createClient function found', 'success');
+
+        // Create client
+        const { createClient } = supabase;
+        const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        log('✓ Supabase client created', 'success');
+        log('URL: ' + SUPABASE_URL, 'info');
+
+        // Test query
+        log('Attempting to query budget_items table...', 'info');
+        const { data, error, count } = await client
+          .from('budget_items')
+          .select('*', { count: 'exact' })
+          .limit(5);
+
+        if (error) {
+          log('ERROR: ' + error.message, 'error');
+          log('Error details: ' + JSON.stringify(error, null, 2), 'error');
+          return;
+        }
+
+        log('✓ Query successful!', 'success');
+        log(`Found ${count} total items in database`, 'success');
+        log(`Retrieved ${data.length} items (limit 5)`, 'success');
+
+        if (data.length > 0) {
+          log('First item ID: ' + data[0].id, 'info');
+          log('First item: ' + data[0].item, 'info');
+        }
+
+        dataOutput.textContent = JSON.stringify(data, null, 2);
+
+      } catch (err) {
+        log('EXCEPTION: ' + err.message, 'error');
+        log('Stack: ' + err.stack, 'error');
+      }
+    }
+
+    async function fetchItems() {
+      log('Fetching all items...', 'info');
+
+      try {
+        const { createClient } = supabase;
+        const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const { data, error } = await client
+          .from('budget_items')
+          .select('*')
+          .order('id');
+
+        if (error) {
+          log('ERROR: ' + error.message, 'error');
+          return;
+        }
+
+        log(`✓ Successfully fetched ${data.length} items`, 'success');
+        dataOutput.textContent = JSON.stringify(data, null, 2);
+
+      } catch (err) {
+        log('EXCEPTION: ' + err.message, 'error');
+      }
+    }
+
+    // Auto-run on load
+    window.addEventListener('DOMContentLoaded', () => {
+      log('Page loaded, ready to test', 'info');
+      log('Supabase URL: ' + SUPABASE_URL, 'info');
+    });
+  </script>
+</body>
+</html>
