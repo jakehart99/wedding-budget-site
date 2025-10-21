@@ -665,13 +665,14 @@
       return;
     }
 
-    filteredData.forEach(item => {
+    filteredData.forEach((item, index) => {
       const tr = document.createElement('tr');
       tr.dataset.itemId = item.id;
       const subTotal = calculateSubTotal(item);
+      const displayIndex = index + 1;
 
       const tdId = document.createElement('td');
-      tdId.textContent = typeof item.id === 'string' && item.id.startsWith('new-item-temp-') ? 'NEW' : item.id;
+      tdId.textContent = displayIndex;
 
       const tdCategory = document.createElement('td');
       tdCategory.textContent = item.category || '';
