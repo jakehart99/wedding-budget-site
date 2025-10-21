@@ -674,13 +674,13 @@
       tdId.textContent = typeof item.id === 'string' && item.id.startsWith('new-item-temp-') ? 'NEW' : item.id;
 
       const tdCategory = document.createElement('td');
-      tdCategory.textContent = escapeHtml(item.category);
+      tdCategory.textContent = item.category || '';
 
       const tdItem = document.createElement('td');
-      tdItem.textContent = escapeHtml(item.item);
+      tdItem.textContent = item.item || '';
 
       const tdRequired = document.createElement('td');
-      tdRequired.textContent = escapeHtml(item.required);
+      tdRequired.textContent = item.required || '';
 
       const tdUnitCost = document.createElement('td');
       tdUnitCost.textContent = formatCurrency(item.unitCost);
@@ -825,19 +825,6 @@
     if (typeof value !== 'number' || isNaN(value)) return '';
     const formatted = value.toFixed(2);
     return raw ? formatted : `$${formatted}`;
-  }
-
-  /**
-   * Basic HTML escape to avoid XSS issues
-   */
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
   }
 
   /**

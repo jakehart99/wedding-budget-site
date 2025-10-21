@@ -328,6 +328,25 @@ td {
   color: var(--color-text);
 }
 
+/* Allow category & item columns to wrap so the table stays compact */
+th:nth-child(2),
+td:nth-child(2) {
+  width: 160px;
+  max-width: 160px;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 220px;
+  max-width: 220px;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
 /* ===== Item Detail Page ===== */
 .back-link {
   display: inline-flex;
